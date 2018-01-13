@@ -23,7 +23,7 @@ void draw(Graphics g) {
 	
 }
 void update() {
-	
+	 super.update();
 	if(up) {
 		y-= speed;
 	}
@@ -38,5 +38,6 @@ void update() {
 	}
 	
 }
+
 
 }

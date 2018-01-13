@@ -1,5 +1,6 @@
 package LeaugeInvaders;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Projectile extends GameObject {
@@ -10,7 +11,8 @@ int speed = 10;
 	}
 @Override
 	void update() {
-		// TODO Auto-generated method stub
+	 super.update();	
+	// TODO Auto-generated method stub
 		y-= speed;
 		if (y<0 ) {
 			isAlive = false;
@@ -19,6 +21,7 @@ int speed = 10;
 @Override
 	void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		super.draw(g);
+	g.setColor(Color.RED);
+	g.fillRect(x, y, width, height);
 	}
 }

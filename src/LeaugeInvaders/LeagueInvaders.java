@@ -32,5 +32,5 @@ frame.add(gp);
 		frame.pack();
 		gp.startGame();
 	}
-
+  
 }
