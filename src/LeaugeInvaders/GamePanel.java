@@ -18,9 +18,11 @@ final int MENU_STATE = 0;
 final int GAME_STATE = 1;
 final int END_STATE = 2;
 int currentState = MENU_STATE;
+boolean projectilefired = false;
+int rocketwidth = 50;
 Font titleFont;
 Font subFont;
-Rocketship rocket = new Rocketship(250,700 ,50 ,50 );
+Rocketship rocket = new Rocketship(250,700 ,rocketwidth ,50 );
 ObjectManager ObjMan = new ObjectManager(rocket);
 
 GamePanel() { 
@@ -95,7 +97,14 @@ if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 } 	
 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 	rocket.down = true;
-} 	
+} 
+if (e.getKeyCode() == KeyEvent.VK_SPACE ) {
+if (projectilefired == false) {
+	
+	ObjMan.addProjectile(new Projectile((rocket.x  +  rocketwidth/2), rocket.y, 10, 10));
+projectilefired = true;
+}
+}
 }
 
 
@@ -113,6 +122,9 @@ public void keyReleased(KeyEvent e) {
 	if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 		rocket.down = false;
 	} 
+	if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		projectilefired = false;
+	} 
 
 }
 void updateMenuState () {
@@ -120,6 +132,9 @@ void updateMenuState () {
 }
 void updateGameState () {
 	ObjMan.update();
+	ObjMan.manageEnemies();
+	ObjMan.checkCollision();
+	ObjMan.purgeObjects();
 }
 void updateEndState () {
 	
