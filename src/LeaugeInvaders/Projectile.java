@@ -17,11 +17,11 @@ int speed = 10;
 		if (y<0 ) {
 			isAlive = false;
 		}
+		
 	}
 @Override
 	void draw(Graphics g) {
 		// TODO Auto-generated method stub
-	g.setColor(Color.RED);
-	g.fillRect(x, y, width, height);
+	g.drawImage(GamePanel.bulletImg, x, y, width, height, null);
 	}
 }

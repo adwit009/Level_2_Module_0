@@ -25,7 +25,7 @@ public class GameObject {
 	
 
 	void update() {
-
+		collisionBox.setLocation(x, y);
 	}
 
 	void draw(Graphics g) {

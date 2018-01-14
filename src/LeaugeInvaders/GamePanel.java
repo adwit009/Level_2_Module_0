@@ -7,19 +7,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.security.Timestamp;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener,KeyListener {
-Timer t;
+	  public static BufferedImage alienImg;
+
+      public static BufferedImage rocketImg;
+
+      public static BufferedImage bulletImg;
+      
+      public static BufferedImage spaceImg;
+	Timer t;
 final int MENU_STATE = 0;
 final int GAME_STATE = 1;
 final int END_STATE = 2;
 int currentState = MENU_STATE;
 boolean projectilefired = false;
 int rocketwidth = 50;
+int projectileWidth = 10;
 Font titleFont;
 Font subFont;
 Rocketship rocket = new Rocketship(250,700 ,rocketwidth ,50 );
@@ -29,6 +40,26 @@ GamePanel() {
 	t = new Timer(1000/60, this);
 	titleFont = new Font("Arial",Font.PLAIN,48);
 	subFont = new Font("Arial",Font.PLAIN,30);
+	   try {
+
+           alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
+
+           rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
+
+           bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+           
+           spaceImg = ImageIO.read(this.getClass().getResourceAsStream("space.png"));
+
+   } catch (IOException e) {
+
+           // TODO Auto-generated catch block
+
+           e.printStackTrace();
+
+   }
+
+
+
 
 }
 @Override
@@ -101,7 +132,7 @@ if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 if (e.getKeyCode() == KeyEvent.VK_SPACE ) {
 if (projectilefired == false) {
 	
-	ObjMan.addProjectile(new Projectile((rocket.x  +  rocketwidth/2), rocket.y, 10, 10));
+	ObjMan.addProjectile(new Projectile((rocket.x  +  rocketwidth/2 - projectileWidth/2), rocket.y, projectileWidth, 10));
 projectilefired = true;
 }
 }
@@ -128,13 +159,27 @@ public void keyReleased(KeyEvent e) {
 
 }
 void updateMenuState () {
-	   
+	
+	ObjMan.reset();
+  
 }
 void updateGameState () {
 	ObjMan.update();
 	ObjMan.manageEnemies();
 	ObjMan.checkCollision();
 	ObjMan.purgeObjects();
+if (rocket.isAlive == false) {
+	currentState = END_STATE;
+	
+	rocket = new Rocketship(250,700 ,rocketwidth ,50 );
+ObjMan.addRocketship(rocket);
+	
+	
+	
+	
+}
+
+
 }
 void updateEndState () {
 	
@@ -153,9 +198,7 @@ void drawMenuState (Graphics g) {
 	
 }
 void drawGameState (Graphics g) {
-	g.setColor(Color.BLACK);
-
-	g.fillRect(0, 0, LeagueInvaders.width, LeagueInvaders.height); 
+	g.drawImage(spaceImg,0,0,500,800,null);
 	ObjMan.draw(g);
 
 
@@ -168,7 +211,7 @@ void drawEndState (Graphics g) {
     g.setFont(titleFont);
 	g.drawString("GAME OVER", 85, 200);
 	g.setFont(subFont);
-	g.drawString("You killed" + "" + " enemies", 115, 400);
+	g.drawString("You killed " + ObjMan.getScore() + " enemies", 115, 400);
 	g.drawString("Press ENTER to restart", 80, 550);
 	
 }
